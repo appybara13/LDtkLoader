@@ -321,16 +321,17 @@ void Project::load(const nlohmann::json& j, const FileLoader& file_loader, bool 
         // clang-format on
     };
 
-    // parse the table of content (v1.2.4)
+    // parse the table of content (v1.5.0)
     if (j.contains("toc")) {
         for (const auto& toc_entry : j["toc"]) {
             auto entity_name = toc_entry["identifier"].get<std::string>();
-            for (const auto& ref : toc_entry["instances"]) {
+            for (const auto& toc_instance : toc_entry["instancesData"]) {
+
                 auto entity_ref = EntityRef(
-                    IID(ref["entityIid"]),
-                    IID(ref["layerIid"]),
-                    IID(ref["levelIid"]),
-                    IID(ref["worldIid"])
+                    IID(toc_instance["iids"]["entityIid"]),
+                    IID(toc_instance["iids"]["layerIid"]),
+                    IID(toc_instance["iids"]["levelIid"]),
+                    IID(toc_instance["iids"]["worldIid"])
                 );
                 resolveEntityRef(entity_ref);
 
